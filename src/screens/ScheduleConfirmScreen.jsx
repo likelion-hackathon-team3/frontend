@@ -41,8 +41,9 @@ export default function ScheduleConfirmScreen() {
     setSaving(true)
     await saveSchedule({ year: YEAR, month: MONTH, marks })
     const env = await fetchEnvironment()
-    if (env.configured) { navigate('/schedule') }
-    else {
+    if (env.configured) {
+      navigate('/')
+    } else {
       navigate('/schedule/hours')
     }
   }
