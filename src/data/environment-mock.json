@@ -1,5 +1,5 @@
 {
-  "configured": true,
+  "configured": false,
   "day": { "start": "07:00", "end": "15:00" },
   "evening": { "start": "15:00", "end": "23:00" },
   "night": { "start": "23:00", "end": "07:00", "nextDay": true },

@@ -29,7 +29,7 @@ export default function EnvironmentSetupScreen() {
   async function handleSubmit() {
     setSaving(true)
     await saveEnvironment({ day, evening, night, commuteMinutes })
-    navigate('/')
+    navigate('/schedule')
   }
 
   return (

@@ -9,6 +9,7 @@ import ScheduleUploadScreen from './screens/ScheduleUploadScreen.jsx'
 import ScheduleConfirmScreen from './screens/ScheduleConfirmScreen.jsx'
 import ScheduleScreen from './screens/ScheduleScreen.jsx'
 import TimelineStep from './screens/checkin/TimelineStep.jsx'
+import EnvironmentSetupScreen from './screens/EnvironmentSetupScreen.jsx'
 
 function OtherScreenPlaceholder() {
   return (
@@ -32,6 +33,7 @@ export default function App() {
       <Route path="/schedule" element={<ScheduleScreen />} />
       <Route path="/schedule/upload" element={<ScheduleUploadScreen />} />
       <Route path="/schedule/confirm" element={<ScheduleConfirmScreen />} />
+      <Route path="/schedule/hours" element={<EnvironmentSetupScreen />} />
 
       <Route path="/settings" element={<SettingsScreen />} />
       <Route path="/timeline" element={<TimelineStep />} />
