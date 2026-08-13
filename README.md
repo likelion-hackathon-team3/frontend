@@ -72,10 +72,10 @@ src/
 | `/onboarding` | 온보딩 (서비스 소개, 시작하기) | `screens/OnboardingScreen.jsx` | 연결 |
 | `/schedule/upload` | 근무표 업로드 (사진 업로드 / AI 인식) | `screens/ScheduleUploadScreen.jsx` | 연결 |
 | `/schedule/confirm` | 인식 결과 확인·수정 (캘린더) | `screens/ScheduleConfirmScreen.jsx` | 연결 |
-| `/schedule/hours` | 근무시간·통근시간 설정 (최초 1회) | `screens/EnvironmentSetupScreen.jsx` | 미연결 |
+| `/schedule/hours` | 근무시간·통근시간 설정 (최초 1회) | `screens/EnvironmentSetupScreen.jsx` | 연결 |
 | `/home` | 홈 대시보드 (인사말, 오늘/다음 근무, 사전예방 카드, CTA) | `screens/HomeScreen.jsx` | 연결 |
-| `/schedule` | 근무표 관리 (조회, 재업로드) | `screens/ScheduleScreen.jsx` | 미연결 |
-| `/checkin` | 웰니스 분석 4단계 (컨디션→웨어러블→분석→타임라인) | `screens/CheckinFlow.jsx`, `screens/checkin/*.jsx` | 연결 |
+| `/schedule` | 근무표 관리 (조회, 재업로드) | `screens/ScheduleScreen.jsx` | 연결 |
+| `/checkin` | 웰니스 분석 4단계 (컨디션→웨어러블→분석→타임라인) | `screens/CheckinFlow.jsx`, `screens/checkin/*.jsx` | 미연결 |
 | `/feedback` | 피드백 (타임라인 마지막 단계에서 진입, 독립 메뉴 아님) | `screens/FeedbackScreen.jsx` | 미연결 |
 | `/settings` | 설정 | `screens/SettingsScreen.jsx` | 연결 |
 
