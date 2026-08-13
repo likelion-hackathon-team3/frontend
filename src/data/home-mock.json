@@ -1,0 +1,42 @@
+{
+  "success": {
+    "greeting": {
+      "name": "김OO",
+      "message": "이번 주도 건강한 루틴을 만들어가고 있어요."
+    },
+    "period": "2026년 7월",
+    "stats": {
+      "sleep": { "label": "평균 수면 시간", "display": "5시간 40분", "deltaText": "20분 지난달 대비", "arrow": "up", "tone": "good" },
+      "fatigue": { "label": "평균 피로도", "display": "3.2 / 5", "deltaText": "0.6 지난달 대비", "arrow": "down", "tone": "good" },
+      "routine": { "label": "루틴 실행률", "display": "72%", "deltaText": "12% 지난달 대비", "arrow": "up", "tone": "good" },
+      "transitionCount": { "label": "전환 횟수", "display": "8회", "deltaText": "지난달 대비", "arrow": "none", "tone": "neutral" }
+    },
+    "transitionHighlights": {
+      "worst": { "label": "가장 힘들었던 전환", "transition": "E → D", "score": "3.8 / 5", "badge": "주의" },
+      "best": { "label": "가장 잘 넘겼던 전환", "transition": "N → OFF", "score": "2.4 / 5", "badge": "좋음" },
+      "improved": { "label": "가장 많이 개선된 전환", "transition": "D → E", "score": "3.0 / 5", "badge": "개선" }
+    },
+    "fatigueTrend": [
+      { "transition": "D→E", "thisMonth": 3.8, "lastMonth": 3.0 },
+      { "transition": "E→N", "thisMonth": 5.6, "lastMonth": 4.6 },
+      { "transition": "N→D", "thisMonth": 4.6, "lastMonth": 4.2 },
+      { "transition": "OFF→D", "thisMonth": 4.4, "lastMonth": 4.0 },
+      { "transition": "E→D", "thisMonth": 5.6, "lastMonth": 4.6 },
+      { "transition": "N→OFF", "thisMonth": 3.6, "lastMonth": 4.6 }
+    ],
+    "aiComment": "E → D 전환에서 피로도가 높게 나타나요. 수면 시간 확보와 낮잠 전략을 더 강화해볼까요?"
+  },
+  "empty": {
+    "greeting": { "name": "김OO", "message": "근무표를 입력하면 분석 리포트가 생성돼요." },
+    "period": "2026년 7월",
+    "stats": {
+      "sleep": { "label": "평균 수면 시간", "display": "-", "deltaText": "", "arrow": "none", "tone": "neutral" },
+      "fatigue": { "label": "평균 피로도", "display": "-", "deltaText": "", "arrow": "none", "tone": "neutral" },
+      "routine": { "label": "루틴 실행률", "display": "-", "deltaText": "", "arrow": "none", "tone": "neutral" },
+      "transitionCount": { "label": "전환 횟수", "display": "0회", "deltaText": "", "arrow": "none", "tone": "neutral" }
+    },
+    "transitionHighlights": null,
+    "fatigueTrend": [],
+    "aiComment": "아직 분석할 근무 기록이 없어요. 근무표를 입력해 보세요."
+  }
+}
