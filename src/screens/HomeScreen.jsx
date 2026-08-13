@@ -1,94 +1,94 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Loader2, AlertTriangle } from 'lucide-react'
+import { Loader2, CalendarClock, Clock3, Sparkles } from 'lucide-react'
 import Sidebar from '../components/Sidebar.jsx'
-import HomeHeader from '../components/HomeHeader.jsx'
-import StatsRow from '../components/StatsRow.jsx'
-import TransitionSummary from '../components/TransitionSummary.jsx'
-import FatigueChart from '../components/FatigueChart.jsx'
-import AICommentBar from '../components/AICommentBar.jsx'
-import { fetchHomeSummary, HOME_SCENARIOS } from '../api/dashboard.js'
+import PreventiveAlerts from '../components/PreventiveAlerts.jsx'
+import { fetchTodayAndNextShift } from '../api/status.js'
+import { MARK_STYLE } from '../components/MonthCalendar.jsx'
+
+function ShiftCard({ label, tag, shift }) {
+  const style = MARK_STYLE[shift.type]
+  return (
+    <div className="bg-card rounded-2xl border border-lavender/10 p-4 flex-1">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-xs text-muted">{label}</span>
+        <span className={`text-[11px] font-medium px-2 py-0.5 rounded-full ${style.bg} ${style.text}`}>{tag}</span>
+      </div>
+      <p className="text-lg font-bold text-ink">
+        {shift.start} - {shift.end}
+      </p>
+      <p className="text-xs text-muted mt-1">{shift.durationLabel}</p>
+    </div>
+  )
+}
 
 export default function HomeScreen() {
   const navigate = useNavigate()
-  const [scenario, setScenario] = useState('success')
-  const [state, setState] = useState({ status: 'loading', data: null, message: '' })
+  const [state, setState] = useState({ status: 'loading', data: null })
 
   useEffect(() => {
     let cancelled = false
-    setState({ status: 'loading', data: null, message: '' })
-
-    fetchHomeSummary(scenario)
-      .then((data) => {
-        if (cancelled) return
-        setState({ status: 'success', data, message: '' })
-      })
-      .catch((err) => {
-        if (cancelled) return
-        setState({ status: 'error', data: null, message: err.message })
-      })
-
+    fetchTodayAndNextShift().then((data) => {
+      if (!cancelled) setState({ status: 'success', data })
+    })
     return () => {
       cancelled = true
     }
-  }, [scenario])
+  }, [])
 
   return (
     <div className="min-h-screen bg-bg flex">
       <Sidebar />
 
-      <main className="flex-1 p-8">
-        {/* 개발용 시나리오 전환 — 홈 화면 목업(fetchHomeSummary) 상태별 확인용. 실 배포 시 제거.
-            주의: 이 데이터는 아직 API 명세서에 없는 임시 프론트 목업이다 (알림은 별도 fetchDashboardAlerts). */}
-        <div className="mb-4 flex items-center gap-2 text-xs text-muted">
-          <span>미리보기 시나리오</span>
-          <select
-            value={scenario}
-            onChange={(e) => setScenario(e.target.value)}
-            className="border border-lavender/20 rounded-lg px-2 py-1 bg-card text-ink"
-          >
-            {HOME_SCENARIOS.map((s) => (
-              <option key={s.value} value={s.value}>
-                {s.label}
-              </option>
-            ))}
-          </select>
-        </div>
-
+      <main className="flex-1 p-8 max-w-3xl">
         {state.status === 'loading' && (
           <div className="flex items-center gap-2 text-sm text-muted py-20 justify-center">
             <Loader2 size={16} className="animate-spin" />
-            분석 리포트를 불러오는 중이에요...
+            불러오는 중이에요...
           </div>
         )}
 
-        {state.status === 'error' && (
-          <div className="flex items-center gap-2 text-sm text-coral bg-coral/5 border border-coral/20 rounded-2xl px-5 py-4">
-            <AlertTriangle size={16} />
-            {state.message}
-          </div>
-        )}
-
-        {state.status === 'success' && state.data && (
+        {state.status === 'success' && (
           <>
-            <HomeHeader
-              name={state.data.greeting.name}
-              message={state.data.greeting.message}
-              period={state.data.period}
-            />
+            <div className="mb-6">
+              <h1 className="text-lg font-bold text-ink">좋은 아침입니다, {state.data.greeting.name} 님.</h1>
+              <p className="text-sm text-muted mt-1">{state.data.greeting.message}</p>
+            </div>
 
-            <div className="flex flex-col gap-5">
-              <StatsRow stats={state.data.stats} />
-
-              <div className="grid grid-cols-2 gap-5">
-                <TransitionSummary
-                  highlights={state.data.transitionHighlights}
-                  onViewAll={() => navigate('/timeline')}
-                />
-                <FatigueChart data={state.data.fatigueTrend} />
+            <div className="flex gap-4 mb-5">
+              <ShiftCard label="오늘의 근무" tag={state.data.today.label} shift={state.data.today} />
+              <ShiftCard
+                label={`다음 근무 (${state.data.next.dayLabel})`}
+                tag={state.data.next.label}
+                shift={state.data.next}
+              />
+              <div className="bg-card rounded-2xl border border-lavender/10 p-4 flex-1 flex flex-col justify-between">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs text-muted">다음 근무까지</span>
+                  <Clock3 size={14} className="text-lavender-deep" />
+                </div>
+                <p className="text-lg font-bold text-lavender-deep">{state.data.next.timeUntilLabel} 남음</p>
               </div>
+            </div>
 
-              <AICommentBar comment={state.data.aiComment} onViewDetail={() => navigate('/timeline')} />
+            <div className="mb-5">
+              <PreventiveAlerts />
+            </div>
+
+            <div className="bg-card rounded-2xl border border-lavender/10 p-6">
+              <div className="flex items-center gap-2 mb-2">
+                <Sparkles size={16} className="text-lavender-deep" />
+                <p className="text-sm font-bold text-ink">오늘의 웰니스 준비</p>
+              </div>
+              <p className="text-sm text-muted mb-4">현재 상태를 확인하고 다음 근무까지의 맞춤 계획을 만들어보세요.</p>
+              <button
+                type="button"
+                onClick={() => navigate('/checkin')}
+                className="flex items-center gap-1.5 text-sm text-white bg-lavender-deep rounded-xl px-5 py-2.5 hover:opacity-90 transition-opacity"
+              >
+                <CalendarClock size={14} />
+                현재 상태 확인하기
+              </button>
             </div>
           </>
         )}

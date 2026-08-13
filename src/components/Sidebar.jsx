@@ -1,11 +1,11 @@
 import { NavLink } from 'react-router-dom'
-import { Home, CalendarDays, Clock, MessageSquareHeart, Settings } from 'lucide-react'
+import { Home, CalendarDays, Activity, Settings } from 'lucide-react'
 
+// 공식 User Flow / MVP 문서 기준 4개 메뉴 (홈 대시보드 / 근무표 / 웰니스 분석 / 설정)
 const NAV_ITEMS = [
-  { to: '/', label: '홈', icon: Home, end: true },
-  { to: '/schedule', label: '근무표 입력', icon: CalendarDays },
-  { to: '/timeline', label: '타임라인', icon: Clock },
-  { to: '/feedback', label: '피드백 & 기록', icon: MessageSquareHeart },
+  { to: '/', label: '홈 대시보드', icon: Home, end: true },
+  { to: '/schedule', label: '근무표', icon: CalendarDays },
+  { to: '/checkin', label: '웰니스 분석', icon: Activity },
   { to: '/settings', label: '설정', icon: Settings },
 ]
 

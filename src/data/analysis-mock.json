@@ -1,0 +1,21 @@
+{
+  "success": {
+    "transitionType": "EVENING_TO_DAY",
+    "consecutiveDays": 3,
+    "availableHours": 7.7,
+    "riskLevel": "DANGER",
+    "currentCondition": {
+      "fatigueLevel": "높음",
+      "sleepHours": 4.5,
+      "recoveryStatus": "회복 필요"
+    }
+  },
+  "noNextShift": {
+    "success": false,
+    "message": "다음 근무 일정이 없습니다."
+  },
+  "envNotSet": {
+    "success": false,
+    "message": "근무 시간이 설정되지 않았습니다."
+  }
+}

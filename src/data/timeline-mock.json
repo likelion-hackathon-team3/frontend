@@ -1,0 +1,37 @@
+{
+  "transition": {
+    "label": "E → D 전환",
+    "riskLevel": "CAUTION",
+    "shiftEnd": "23:00",
+    "nextShiftStart": "07:00",
+    "minSleep": "8시간 00분",
+    "recommendedSleep": "5시간 10분"
+  },
+  "events": [
+    { "time": "23:30", "title": "저녁 식사", "desc": "수면 리듬 유지를 위해 식사량을 줄여보세요.", "tag": "식사" },
+    { "time": "00:10", "title": "취침 준비", "desc": "조명, 소리, 어두운 환경을 만들어보세요.", "tag": "권장" },
+    { "time": "00:40", "title": "취침 (권장 취침 시간)", "desc": "수면 목표 5시간 10분", "tag": "수면" },
+    { "time": "05:50", "title": "기상", "desc": "알람은 10분 단위 권장", "tag": "기상" },
+    { "time": "06:20", "title": "아침 식사", "desc": "폭식 대신 가벼운 식사를 선택해주세요.", "tag": "식사" },
+    { "time": "07:20", "title": "D 근무 시작", "desc": "오늘 하루도 힘내봐요!", "tag": "근무" }
+  ],
+  "weeklySummary": [
+    { "transition": "D→E", "count": 2 },
+    { "transition": "E→D", "count": 1 },
+    { "transition": "N→D", "count": 0 },
+    { "transition": "N→OFF", "count": 2 },
+    { "transition": "E→N", "count": 1 }
+  ],
+  "wearable": {
+    "sleepHours": "5시간 20분",
+    "hrv": "42 ms",
+    "activity": "3,210 걸음",
+    "fatigue": "높음",
+    "detail": {
+      "restingHeartRate": "58 bpm",
+      "deepSleepRatio": "18%",
+      "remSleepRatio": "22%",
+      "activityGoalRatio": "32%"
+    }
+  }
+}
