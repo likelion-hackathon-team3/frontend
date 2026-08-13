@@ -3,7 +3,7 @@ import { Home, CalendarDays, Activity, History, Settings } from 'lucide-react'
 
 // 공식 User Flow / MVP 문서 기준 메뉴 (홈 대시보드 / 근무표 / 웰니스 분석 / 타임라인 / 설정)
 const NAV_ITEMS = [
-  { to: '/home', label: '홈 대시보드', icon: Home, end: true },
+  { to: '/', label: '홈 대시보드', icon: Home, end: true },
   { to: '/schedule', label: '근무표', icon: CalendarDays },
   { to: '/checkin', label: '웰니스 분석', icon: Activity },
   { to: '/timeline', label: '타임라인', icon: History },
