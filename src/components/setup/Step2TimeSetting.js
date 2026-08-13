@@ -22,7 +22,7 @@ function Step2TimeSetting({ shiftType, shiftTimes, updateFormData, onNext, onPre
         근무 시간 설정
       </h2>
       <p style={{ fontSize: '14px', color: '#666', marginBottom: '24px' }}>
-        각 근무 유형의 출퇴근 시간을 설정해주세요. (최초 1회만 설정됩니다.)
+        각 근무의 출퇴근 시간을 설정해주세요. (최초 1회만 설정됩니다.)
       </p>
 
       {/* 데이(Day) */}
