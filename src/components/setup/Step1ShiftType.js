@@ -41,7 +41,7 @@ function Step1ShiftType({ formData, updateFormData, onNext }) {
         교대 유형을 선택해주세요.
       </h2>
       <p style={{ fontSize: '14px', color: '#666', marginBottom: '24px' }}>
-        정확한 분석을 위해 필요해요.
+        선택한 교대 유형에 맞춰 최적화 시킨 화면이 렌더링됩니다.
       </p>
 
       {/* 카드 그리드 영역 */}
