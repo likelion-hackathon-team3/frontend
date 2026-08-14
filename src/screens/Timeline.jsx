@@ -26,6 +26,7 @@ const LEGEND_ITEMS = [
   { label: "운동", color: "bg-sage" },
   { label: "회복", color: "bg-coral" },
   { label: "카페인", color: "bg-[#6D4C41]" },
+  { label: "근무", color: "bg-blue-600" },
 ];
 
 // 카테고리 테마 매퍼 (아이콘 & 색상 자동화)
@@ -37,13 +38,21 @@ const CATEGORY_THEME = {
   },
   MEAL: { icon: Utensils, color: "text-gold", dotColor: "border-gold" }, // 👈 sage에서 gold로 수정!
   EXERCISE: { icon: Dumbbell, color: "text-sage", dotColor: "border-sage" },
-  PREPARATION: { icon: Bath, color: "text-coral", dotColor: "border-coral" }, // 👈 blue-400에서 coral로 수정!
+  PREPARATION: {
+    icon: Bath,
+    color: "text-coral",
+    dotColor: "borgit add .der-coral",
+  }, // 👈 blue-400에서 coral로 수정!
   CAFFEINE: {
     icon: Coffee,
     color: "text-[#6D4C41]",
     dotColor: "border-[#6D4C41]",
   },
-  WAKE_UP: { icon: Sun, color: "text-gold", dotColor: "border-gold" },
+  WAKE_UP: {
+    icon: Sun,
+    color: "text-lavender-deep",
+    dotColor: "border-lavender-deep",
+  },
   WORK: {
     icon: Briefcase,
     color: "text-blue-600",
