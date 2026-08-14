@@ -40,10 +40,10 @@ export default function ScheduleConfirmScreen() {
   async function handleRegister() {
     setSaving(true)
     await saveSchedule({ year: YEAR, month: MONTH, marks })
+    navigate('/schedule/hours')
     const env = await fetchEnvironment()
-    if (env.configured) {
-      navigate('/')
-    } else {
+    if (env.configured) { navigate('/schedule') }
+    else {
       navigate('/schedule/hours')
     }
   }

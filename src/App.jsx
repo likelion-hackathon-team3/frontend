@@ -3,11 +3,14 @@ import HomeScreen from "./screens/HomeScreen.jsx";
 import ConditionCheckScreen from "./screens/checkin/ConditionCheckScreen.jsx";
 import AnalysisResultScreen from "./screens/checkin/AnalysisResultScreen.jsx";
 import Sidebar from "./components/Sidebar.jsx";
+import SettingsScreen from "./screens/SettingsScreen.jsx";
+import OnboardingScreen from "./screens/OnboardingScreen.jsx";
+import ScheduleUploadScreen from "./screens/ScheduleUploadScreen.jsx";
+import ScheduleConfirmScreen from "./screens/ScheduleConfirmScreen.jsx";
+import ScheduleScreen from "./screens/ScheduleScreen.jsx";
+import EnvironmentSetupScreen from "./screens/EnvironmentSetupScreen.jsx";
 import TimelinePage from "./screens/Timeline.jsx";
 
-// 담당 파트: 홈 대시보드 → 현재 상태 확인(컨디션+웨어러블) → 통합분석 결과.
-// 그 다음 단계인 웰니스 타임라인(04)부터는 다른 팀원 담당이라 이 폴더에는 없고,
-// 사이드바의 다른 메뉴(근무표/설정)와 함께 사이드바만 유지된 빈 화면으로 넘어간다.
 function OtherScreenPlaceholder() {
   return (
     <div className="min-h-screen bg-bg flex">
@@ -20,11 +23,25 @@ function OtherScreenPlaceholder() {
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<HomeScreen />} />
+      {/* 1. 앱을 켜면 가장 먼저 뜨는 기본 경로(/)를 온보딩으로 설정 */}
+      <Route path="/" element={<OnboardingScreen />} />
+
+      {/* 2. 원래 있던 홈 대시보드는 /home 경로로 옮겼습니다 */}
+      <Route path="/home" element={<HomeScreen />} />
+
+      {/* 3. 근무표 기능 화면들 연결 */}
+      <Route path="/schedule" element={<ScheduleScreen />} />
+      <Route path="/schedule/upload" element={<ScheduleUploadScreen />} />
+      <Route path="/schedule/confirm" element={<ScheduleConfirmScreen />} />
+      <Route path="/schedule/hours" element={<EnvironmentSetupScreen />} />
+
+      <Route path="/settings" element={<SettingsScreen />} />
+
+      {/* 4. 기존 체크인(상태 확인) 화면들 */}
       <Route path="/checkin" element={<ConditionCheckScreen />} />
       <Route path="/checkin/analysis" element={<AnalysisResultScreen />} />
 
-      {/* ⬇️ [태훈님 확인용] 타임라인 라우트 추가 시작 (사이드바 메뉴와 함께 보이도록 묶어두었습니다) */}
+      {/* 🚀 5. [태훈님 찐 최종] 타임라인 라우트 적용 (민서님의 중복 라우트 제거) */}
       <Route
         path="/timeline"
         element={
@@ -36,7 +53,6 @@ export default function App() {
           </div>
         }
       />
-      {/* ⬆️ [태훈님 확인용] 타임라인 라우트 추가 끝 */}
 
       <Route path="*" element={<OtherScreenPlaceholder />} />
     </Routes>
