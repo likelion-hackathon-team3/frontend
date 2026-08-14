@@ -29,7 +29,7 @@ export default function EnvironmentSetupScreen() {
   async function handleSubmit() {
     setSaving(true)
     await saveEnvironment({ day, evening, night, commuteMinutes })
-    navigate('/')
+    navigate('/schedule')
   }
 
   return (
@@ -37,7 +37,7 @@ export default function EnvironmentSetupScreen() {
       <Sidebar />
       <main className="flex-1 p-8 max-w-2xl">
         <h1 className="text-lg font-bold text-ink mb-1">근무 시간을 설정해주세요.</h1>
-        <p className="text-sm text-muted mb-6">최초 1회만 설정하면 돼요. 이후 설정 화면에서 언제든 바꿀 수 있어요.</p>
+        <p className="text-sm text-muted mb-6">최초 1회만 설정하면 돼요.</p>
 
         <div className="grid grid-cols-3 gap-4 mb-4">
           <div className="bg-card rounded-2xl border border-lavender/10 p-5">
@@ -69,7 +69,7 @@ export default function EnvironmentSetupScreen() {
             </div>
             <div className="flex flex-col gap-3">
               <TimeField label="출근" value={night.start} onChange={(v) => setNight((p) => ({ ...p, start: v }))} />
-              <TimeField label="퇴근 (다음날)" value={night.end} onChange={(v) => setNight((p) => ({ ...p, end: v }))} />
+              <TimeField label="퇴근" value={night.end} onChange={(v) => setNight((p) => ({ ...p, end: v }))} />
             </div>
           </div>
         </div>
