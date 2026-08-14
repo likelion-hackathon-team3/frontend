@@ -35,13 +35,9 @@ const CATEGORY_THEME = {
     color: "text-lavender-deep",
     dotColor: "border-lavender-deep",
   },
-  MEAL: { icon: Utensils, color: "text-sage", dotColor: "border-sage" },
+  MEAL: { icon: Utensils, color: "text-gold", dotColor: "border-gold" }, // 👈 sage에서 gold로 수정!
   EXERCISE: { icon: Dumbbell, color: "text-sage", dotColor: "border-sage" },
-  PREPARATION: {
-    icon: Bath,
-    color: "text-blue-400",
-    dotColor: "border-blue-400",
-  },
+  PREPARATION: { icon: Bath, color: "text-coral", dotColor: "border-coral" }, // 👈 blue-400에서 coral로 수정!
   CAFFEINE: {
     icon: Coffee,
     color: "text-[#6D4C41]",
@@ -70,7 +66,7 @@ export default function TimelinePage({ targetDate = "" }) {
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false); // 💡 POST 전송 중(로딩) 상태
 
-  // 피드백 입력 데이터 (백엔드 API 명세서 100% 일치)
+  // 피드백 입력 데이터
   const [feedback, setFeedback] = useState({
     actualSleepDuration: 6.0,
     caffeineIntake: {
