@@ -41,7 +41,6 @@ export default function App() {
       <Route path="/checkin" element={<ConditionCheckScreen />} />
       <Route path="/checkin/analysis" element={<AnalysisResultScreen />} />
 
-      {/* 🚀 5. [태훈님 찐 최종] 타임라인 라우트 적용 (민서님의 중복 라우트 제거) */}
       <Route
         path="/timeline"
         element={
