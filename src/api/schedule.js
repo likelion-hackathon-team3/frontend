@@ -11,7 +11,11 @@ export function fetchSchedule() {
 // 실제로는 이미지를 업로드하지만, 목업에서는 파일 유무와 상관없이 정해진 인식 결과를 반환한다.
 export function recognizeSchedule() {
   return new Promise((resolve) => {
-    setTimeout(() => resolve(mock.recognizeResult), 1200)
+    setTimeout(() => resolve({
+      success: true,
+      recognizedSchedules: mock.recognizeResult?.schedules || [],
+      failedDates: []
+    }), 1200)
   })
 }
 
@@ -19,7 +23,7 @@ export function recognizeSchedule() {
 export function saveSchedule(payload) {
   return new Promise((resolve) => {
     console.log('[POST /api/schedules]', payload)
-    setTimeout(() => resolve({ success: true }), 400)
+    setTimeout(() => resolve({ success: true, savedCount: payload.schedules?.length || 0 }), 400)
   })
 }
 
@@ -27,6 +31,6 @@ export function saveSchedule(payload) {
 export function deleteScheduleDate(date) {
   return new Promise((resolve) => {
     console.log('[DELETE /api/schedules]', date)
-    setTimeout(() => resolve({ success: true }), 300)
+    setTimeout(() => resolve({ success: true, message: "삭제되었습니다." }), 300)
   })
 }
