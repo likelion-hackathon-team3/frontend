@@ -25,17 +25,6 @@ export function fetchAnalysis(scenario = 'success') {
   })
 }
 
-// currentCondition.nextShiftMinutes(분) 표시용 포맷터.
-// 남은 시간 자체는 백엔드가 계산해 내려주며, 여기서는 표시 문자열로만 변환한다.
-export function formatShiftMinutes(minutes) {
-  if (minutes == null) return null
-  const hours = Math.floor(minutes / 60)
-  const mins = minutes % 60
-  if (hours === 0) return `${mins}분`
-  if (mins === 0) return `${hours}시간`
-  return `${hours}시간 ${mins}분`
-}
-
 // 홈 대시보드 상단 "오늘/다음 근무" 카드용 (근무표+근무환경을 조합한 뷰).
 // 명세서에 전용 엔드포인트가 없어 프론트에서 조합해 보여준다.
 export function fetchTodayAndNextShift() {

@@ -1,5 +1,5 @@
 {
   "greeting": { "name": "김간호사", "message": "다음 일정을 확인하고, 건강한 전환을 준비해보세요." },
   "today": { "type": "E", "label": "Evening", "start": "15:00", "end": "23:00", "durationLabel": "8시간 근무" },
-  "next": { "type": "D", "label": "Day", "start": "07:00", "end": "15:00", "dayLabel": "내일" }
+  "next": { "type": "D", "label": "Day", "start": "07:00", "end": "15:00", "dayLabel": "내일", "timeUntilLabel": "8시간 10분" }
 }

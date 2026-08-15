@@ -5,6 +5,8 @@
     "transitionLabel": "E → D",
     "transitionSubLabel": "Evening → Day",
     "consecutiveDays": 2,
+    "nextShiftIn": "8시간 10분",
+    "nextShiftStartLabel": "내일 07:00 시작",
     "availableHours": 6.5,
     "availableHoursLabel": "6시간 30분",
     "availableHoursNote": "통근 제외 시간 1시간 40분 제외",
@@ -17,8 +19,19 @@
       "fatigueNote": "많이 피곤해요",
       "sleepHours": 5.33,
       "recoveryStatus": "회복 우선 필요",
-      "recoveryNote": "수면 부족으로 인한 회복 부채가 있어요. 충분한 수면과 휴식을 우선하세요.",
-      "nextShiftMinutes": 490
+      "recoveryNote": "수면 부족으로 인한 회복 부채가 있어요. 충분한 수면과 휴식을 우선하세요."
+    },
+    "wearable": {
+      "sleepLabel": "5시간 20분",
+      "sleepTag": "부족",
+      "sleepRecommend": "권장 7시간 이상",
+      "steps": 6420,
+      "stepsTag": "보통",
+      "stepsRecommend": "권장 7,000~10,000",
+      "heartRate": 72,
+      "heartRateTag": "보통",
+      "heartRateRecommend": "평소 68bpm",
+      "device": "스마트워치 (예시)"
     },
     "aiComment": "수면시간이 짧고 현재 피로도가 높아 회복 우선의 계획이 필요해요. 활동량은 보통 수준이며, 심박수는 안정적인 편이에요. 이번 전환에서는 카페인 조절과 규칙적인 수면을 추천드려요.",
     "keyPoints": [
