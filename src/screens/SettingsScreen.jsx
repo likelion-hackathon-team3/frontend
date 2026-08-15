@@ -33,6 +33,37 @@ function DailySettings() {
   const [reportDay, setReportDay] = useState("sun-9");
   const [nightMode, setNightMode] = useState("system");
 
+  // 👇 앱 푸시 알림 권한 요청 및 해제 로직 추가
+  const handlePushToggle = (checked) => {
+    setPushEnabled(checked);
+
+    if (checked) {
+      // 브라우저가 알림을 지원하는지 확인
+      if ("Notification" in window) {
+        Notification.requestPermission().then((permission) => {
+          if (permission === "granted") {
+            // 권한 허용 시 웰컴 푸시 알림 발생
+            new Notification("알림 설정 완료", {
+              body: "이제 앱 푸시 알림을 받을 수 있어요!",
+            });
+          } else {
+            // 권한 거부 시 경고창 띄우고 토글 원상복구
+            alert(
+              "알림 권한이 차단되어 있습니다. 브라우저 설정에서 허용해주세요.",
+            );
+            setPushEnabled(false);
+          }
+        });
+      } else {
+        alert("이 브라우저는 푸시 알림을 지원하지 않습니다.");
+        setPushEnabled(false);
+      }
+    } else {
+      // 토글 OFF 시 해제 알림
+      alert("앱 푸시 알림이 해제되었습니다.");
+    }
+  };
+
   return (
     <div className="grid grid-cols-3 gap-5">
       <div className="bg-card rounded-2xl border border-lavender/10 p-5">
@@ -73,7 +104,8 @@ function DailySettings() {
         <div className="flex flex-col gap-4 text-sm">
           <div className="flex items-center justify-between">
             <span className="text-ink/70">앱 푸시 알림</span>
-            <Toggle checked={pushEnabled} onChange={setPushEnabled} />
+            {/* 👇 새로 만든 handlePushToggle 함수를 연결 */}
+            <Toggle checked={pushEnabled} onChange={handlePushToggle} />
           </div>
           <div className="flex items-center justify-between">
             <span className="text-ink/70">이메일</span>
