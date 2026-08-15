@@ -1,54 +1,68 @@
-import { useState } from 'react'
-import { Check } from 'lucide-react'
-import Sidebar from '../components/Sidebar.jsx'
+import { useState } from "react";
+import { Check } from "lucide-react";
+import Sidebar from "../components/Sidebar.jsx";
 
 const TABS = [
-  { value: 'daily', label: '일일 설정' },
-  { value: 'profile', label: '개인 설정' },
-  { value: 'notify', label: '알림 설정' },
-]
+  { value: "daily", label: "일일 설정" },
+  { value: "profile", label: "개인 설정" },
+  { value: "notify", label: "알림 설정" },
+];
 
 function Toggle({ checked, onChange }) {
   return (
     <button
       type="button"
       onClick={() => onChange(!checked)}
-      className={`w-9 h-5 rounded-full relative transition-colors shrink-0 ${checked ? 'bg-lavender-deep' : 'bg-lavender/20'}`}
+      className={`w-9 h-5 rounded-full relative transition-colors shrink-0 ${checked ? "bg-lavender-deep" : "bg-lavender/20"}`}
     >
       <span
         className="absolute top-0.5 w-4 h-4 rounded-full bg-white transition-all"
-        style={{ left: checked ? '18px' : '2px' }}
+        style={{ left: checked ? "18px" : "2px" }}
       />
     </button>
-  )
+  );
 }
 
 function DailySettings() {
-  const [reminderHours, setReminderHours] = useState(true)
-  const [transitionDay, setTransitionDay] = useState(true)
-  const [feedbackReminder, setFeedbackReminder] = useState(false)
-  const [pushEnabled, setPushEnabled] = useState(true)
-  const [emailEnabled, setEmailEnabled] = useState(true)
-  const [smsEnabled, setSmsEnabled] = useState(false)
-  const [reportDay, setReportDay] = useState('sun-9')
-  const [nightMode, setNightMode] = useState('system')
+  const [reminderHours, setReminderHours] = useState(true);
+  const [transitionDay, setTransitionDay] = useState(true);
+  const [feedbackReminder, setFeedbackReminder] = useState(false);
+  const [pushEnabled, setPushEnabled] = useState(true);
+  const [emailEnabled, setEmailEnabled] = useState(true);
+  const [smsEnabled, setSmsEnabled] = useState(false);
+  const [reportDay, setReportDay] = useState("sun-9");
+  const [nightMode, setNightMode] = useState("system");
 
   return (
     <div className="grid grid-cols-3 gap-5">
       <div className="bg-card rounded-2xl border border-lavender/10 p-5">
         <p className="text-sm font-bold text-ink mb-1">알림 시간 설정</p>
-        <p className="text-xs text-muted mb-4">리마인더가 몇 시간 전에 알림을 보낼지 설정해요.</p>
+        <p className="text-xs text-muted mb-4">
+          리마인더가 몇 시간 전에 알림을 보낼지 설정해요.
+        </p>
         <div className="flex flex-col gap-3 text-sm">
           <label className="flex items-center gap-2">
-            <input type="checkbox" checked={reminderHours} onChange={(e) => setReminderHours(e.target.checked)} />
+            <input
+              type="checkbox"
+              checked={reminderHours}
+              onChange={(e) => setReminderHours(e.target.checked)}
+            />
             다음 근무 10시간 전
           </label>
           <label className="flex items-center gap-2">
-            <input type="checkbox" checked={transitionDay} onChange={(e) => setTransitionDay(e.target.checked)} />
+            <input
+              type="checkbox"
+              checked={transitionDay}
+              onChange={(e) => setTransitionDay(e.target.checked)}
+            />
             전환 당일 24시간 전
           </label>
           <label className="flex items-center gap-2">
-            <input type="checkbox" checked={feedbackReminder} onChange={(e) => setFeedbackReminder(e.target.checked)} />
+            <input
+              type="checkbox"
+              checked={feedbackReminder}
+              onChange={(e) => setFeedbackReminder(e.target.checked)}
+            />
             피드백 리마인드 즉시
           </label>
         </div>
@@ -102,7 +116,7 @@ function DailySettings() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function ProfileSettings() {
@@ -112,31 +126,38 @@ function ProfileSettings() {
       <div className="flex flex-col gap-3 text-sm">
         <label className="flex flex-col gap-1">
           <span className="text-xs text-muted">이름</span>
-          <input defaultValue="김OO" className="border border-lavender/20 rounded-lg px-2 py-1.5 bg-bg text-ink" />
+          <input
+            defaultValue="김OO"
+            className="border border-lavender/20 rounded-lg px-2 py-1.5 bg-bg text-ink"
+          />
         </label>
         <label className="flex flex-col gap-1">
           <span className="text-xs text-muted">근무지 / 직군</span>
-          <input placeholder="예: OO병원 간호사" className="border border-lavender/20 rounded-lg px-2 py-1.5 bg-bg text-ink" />
+          <input
+            placeholder="예: OO병원 간호사"
+            className="border border-lavender/20 rounded-lg px-2 py-1.5 bg-bg text-ink"
+          />
         </label>
       </div>
     </div>
-  )
+  );
 }
 
 function NotifySettings() {
   return (
     <div className="bg-card rounded-2xl border border-lavender/10 p-5 max-w-md text-sm text-muted">
-      전체 알림 on/off, 방해 금지 시간대 등 세부 알림 설정은 다음 스프린트에서 확장될 예정이에요. 지금은 "일일 설정" 탭에서 기본 알림을 조정할 수 있어요.
+      전체 알림 on/off, 방해 금지 시간대 등 세부 알림 설정은 다음 스프린트에서
+      확장될 예정이에요. 지금은 "일일 설정" 탭에서 기본 알림을 조정할 수 있어요.
     </div>
-  )
+  );
 }
 
 export default function SettingsScreen() {
-  const [tab, setTab] = useState('daily')
-  const [savedAt, setSavedAt] = useState(null)
+  const [tab, setTab] = useState("daily");
+  const [savedAt, setSavedAt] = useState(null);
 
   function handleSave() {
-    setSavedAt(new Date())
+    setSavedAt(new Date());
   }
 
   return (
@@ -151,7 +172,9 @@ export default function SettingsScreen() {
               type="button"
               onClick={() => setTab(t.value)}
               className={`pb-3 -mb-px border-b-2 transition-colors ${
-                tab === t.value ? 'border-lavender-deep text-lavender-deep font-medium' : 'border-transparent text-muted'
+                tab === t.value
+                  ? "border-lavender-deep text-lavender-deep font-medium"
+                  : "border-transparent text-muted"
               }`}
             >
               {t.label}
@@ -159,9 +182,9 @@ export default function SettingsScreen() {
           ))}
         </div>
 
-        {tab === 'daily' && <DailySettings />}
-        {tab === 'profile' && <ProfileSettings />}
-        {tab === 'notify' && <NotifySettings />}
+        {tab === "daily" && <DailySettings />}
+        {tab === "profile" && <ProfileSettings />}
+        {tab === "notify" && <NotifySettings />}
 
         <div className="flex items-center gap-3 mt-6">
           <button
@@ -180,5 +203,5 @@ export default function SettingsScreen() {
         </div>
       </main>
     </div>
-  )
+  );
 }
