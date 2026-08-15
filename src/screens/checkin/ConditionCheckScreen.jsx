@@ -119,7 +119,7 @@ export default function ConditionCheckScreen() {
                 <WearableRow icon={Moon} label="수면시간" value={wearable.sleepLabel} />
                 <WearableRow icon={Footprints} label="활동량" value={`${wearable.activitySteps.toLocaleString()} 걸음`} />
                 <WearableRow icon={HeartPulse} label="안정시 심박수" value={`${wearable.heartRate} bpm`} />
-                <WearableRow icon={Watch} label="착용 기기" value={wearable.device} />
+                <WearableRow icon={Watch} label="착용 기기" value="스마트워치" />
               </div>
             )}
           </div>
