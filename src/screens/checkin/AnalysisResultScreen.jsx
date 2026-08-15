@@ -2,23 +2,17 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { TriangleAlert, Lightbulb, Check, ArrowRight, Loader2, Moon, Footprints, HeartPulse, Watch } from 'lucide-react'
 import Sidebar from '../../components/Sidebar.jsx'
-import { fetchAnalysis } from '../../api/status.js'
+import { fetchAnalysis, fetchWearableData, formatShiftMinutes } from '../../api/status.js'
 
 // User Flow 03단계 — 통합분석 결과.
-// GET /api/analysis 응답(근무 전환 분석 + 개인 회복 상태 분석)을 그대로 반영한다.
+// GET /api/analysis 응답(근무 전환 분석 + 개인 회복 상태 분석)과
+// GET /api/wearable-data 응답(오늘의 웨어러블 수치)을 함께 반영한다.
 // "맞춤 웰니스 계획 보기"를 누르면 04단계(웰니스 타임라인)로 넘어가는데,
 // 타임라인 화면은 다른 팀원 담당이라 이 사본에는 포함되어 있지 않다 (라우트만 남겨둠).
 const RISK_STYLE = {
   NORMAL: { bg: 'bg-sage/10', border: 'border-sage/30', icon: 'text-sage', text: 'text-sage' },
   CAUTION: { bg: 'bg-gold/10', border: 'border-gold/30', icon: 'text-gold', text: 'text-gold' },
   DANGER: { bg: 'bg-coral/10', border: 'border-coral/30', icon: 'text-coral', text: 'text-coral' },
-}
-
-const TAG_STYLE = {
-  부족: 'text-coral bg-coral/10',
-  주의: 'text-coral bg-coral/10',
-  보통: 'text-gold bg-gold/10',
-  양호: 'text-sage bg-sage/10',
 }
 
 function Cell({ label, value, sub, valueClass = 'text-ink' }) {
@@ -31,7 +25,7 @@ function Cell({ label, value, sub, valueClass = 'text-ink' }) {
   )
 }
 
-function MiniStat({ icon: Icon, label, value, tag }) {
+function MiniStat({ icon: Icon, label, value }) {
   return (
     <div className="bg-bg rounded-xl p-3 flex flex-col gap-1">
       <span className="flex items-center gap-1 text-[11px] text-muted">
@@ -39,27 +33,22 @@ function MiniStat({ icon: Icon, label, value, tag }) {
         {label}
       </span>
       <span className="text-sm font-bold text-ink">{value}</span>
-      {tag && (
-        <span className={`self-start text-[10px] font-medium px-1.5 py-0.5 rounded-full ${TAG_STYLE[tag] || 'text-muted bg-lavender/10'}`}>
-          {tag}
-        </span>
-      )}
     </div>
   )
 }
 
 export default function AnalysisResultScreen() {
   const navigate = useNavigate()
-  const [state, setState] = useState({ status: 'loading', data: null, message: '' })
+  const [state, setState] = useState({ status: 'loading', data: null, wearable: null, message: '' })
 
   useEffect(() => {
     let cancelled = false
-    fetchAnalysis('success').then((res) => {
+    Promise.all([fetchAnalysis('success'), fetchWearableData()]).then(([res, wearable]) => {
       if (cancelled) return
       if (res.success === false) {
-        setState({ status: 'error', data: null, message: res.message })
+        setState({ status: 'error', data: null, wearable: null, message: res.message })
       } else {
-        setState({ status: 'success', data: res, message: '' })
+        setState({ status: 'success', data: res, wearable, message: '' })
       }
     })
     return () => {
@@ -119,7 +108,7 @@ export default function AnalysisResultScreen() {
                 <div className="grid grid-cols-2 gap-4 mb-4">
                   <Cell label="전환 유형" value={state.data.transitionLabel} sub={state.data.transitionSubLabel} valueClass="text-lavender-deep" />
                   <Cell label="최근 연속 근무일수" value={`${state.data.consecutiveDays}일`} sub="(오늘 포함)" />
-                  <Cell label="다음 근무까지" value={state.data.nextShiftIn} sub={`(${state.data.nextShiftStartLabel})`} />
+                  <Cell label="다음 근무까지" value={formatShiftMinutes(state.data.currentCondition.nextShiftMinutes)} />
                   <Cell label="실제 활용 가능시간" value={state.data.availableHoursLabel} sub={state.data.availableHoursNote} valueClass="text-sage" />
                 </div>
 
@@ -143,12 +132,6 @@ export default function AnalysisResultScreen() {
                       개인 회복 상태 분석 <span className="text-muted font-normal">(웨어러블 + 컨디션 기반)</span>
                     </h2>
                   </div>
-                  <div className="flex items-center gap-2 text-[10px] text-muted">
-                    <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-sage inline-block" />양호</span>
-                    <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-gold inline-block" />보통</span>
-                    <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-terracotta inline-block" />주의</span>
-                    <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-coral inline-block" />위험</span>
-                  </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 mb-4">
@@ -168,10 +151,10 @@ export default function AnalysisResultScreen() {
 
                 <p className="text-xs text-muted mb-2">오늘의 웨어러블 데이터</p>
                 <div className="grid grid-cols-4 gap-2 mb-4">
-                  <MiniStat icon={Moon} label="수면시간" value={state.data.wearable.sleepLabel} tag={state.data.wearable.sleepTag} />
-                  <MiniStat icon={Footprints} label="활동량" value={`${state.data.wearable.steps.toLocaleString()} 걸음`} tag={state.data.wearable.stepsTag} />
-                  <MiniStat icon={HeartPulse} label="안정시 심박수" value={`${state.data.wearable.heartRate} bpm`} tag={state.data.wearable.heartRateTag} />
-                  <MiniStat icon={Watch} label="착용 기기" value={state.data.wearable.device} />
+                  <MiniStat icon={Moon} label="수면시간" value={state.wearable.sleepLabel} />
+                  <MiniStat icon={Footprints} label="활동량" value={`${state.wearable.activitySteps.toLocaleString()} 걸음`} />
+                  <MiniStat icon={HeartPulse} label="안정시 심박수" value={`${state.wearable.heartRate} bpm`} />
+                  <MiniStat icon={Watch} label="착용 기기" value="스마트워치" />
                 </div>
 
                 <div className="bg-lavender-deep/5 rounded-xl p-4">

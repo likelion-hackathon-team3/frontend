@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Loader2, CalendarClock, Clock3, Sparkles } from 'lucide-react'
 import Sidebar from '../components/Sidebar.jsx'
 import PreventiveAlerts from '../components/PreventiveAlerts.jsx'
-import { fetchTodayAndNextShift } from '../api/status.js'
+import { fetchTodayAndNextShift, fetchAnalysis, formatShiftMinutes } from '../api/status.js'
 import { MARK_STYLE } from '../components/MonthCalendar.jsx'
 
 function ShiftCard({ label, tag, shift }) {
@@ -28,8 +28,11 @@ export default function HomeScreen() {
 
   useEffect(() => {
     let cancelled = false
-    fetchTodayAndNextShift().then((data) => {
-      if (!cancelled) setState({ status: 'success', data })
+    Promise.all([fetchTodayAndNextShift(), fetchAnalysis()]).then(([data, analysis]) => {
+      if (cancelled) return
+      const nextShiftIn =
+        analysis.success !== false ? formatShiftMinutes(analysis.currentCondition.nextShiftMinutes) : null
+      setState({ status: 'success', data: { ...data, nextShiftIn } })
     })
     return () => {
       cancelled = true
@@ -67,7 +70,9 @@ export default function HomeScreen() {
                   <span className="text-xs text-muted">다음 근무까지</span>
                   <Clock3 size={14} className="text-lavender-deep" />
                 </div>
-                <p className="text-lg font-bold text-lavender-deep">{state.data.next.timeUntilLabel} 남음</p>
+                <p className="text-lg font-bold text-lavender-deep">
+                  {state.data.nextShiftIn ? `${state.data.nextShiftIn} 남음` : '-'}
+                </p>
               </div>
             </div>
 
