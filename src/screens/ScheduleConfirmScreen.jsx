@@ -37,14 +37,24 @@ export default function ScheduleConfirmScreen() {
     })
   }
 
-  async function handleRegister() {
+async function handleRegister() {
     setSaving(true)
-    await saveSchedule({ year: YEAR, month: MONTH, marks })
-    navigate('/schedule/hours')
-    const env = await fetchEnvironment()
-    if (env.configured) { navigate('/schedule') }
-    else {
-      navigate('/schedule/hours')
+    
+    // 1. API 통신 결과를 res 변수에 담습니다.
+    const res = await saveSchedule({ year: YEAR, month: MONTH, marks })
+    
+    // 2. success가 true일 때만 다음 화면으로 넘어갑니다.
+    if (res.success === true) {
+      const env = await fetchEnvironment()
+      if (env.configured) { 
+        navigate('/schedule') 
+      } else {
+        navigate('/schedule/hours')
+      }
+    } else {
+      // 3. 실패 시 에러 메시지를 띄우고 로딩을 풀어줍니다.
+      alert(res.message || '근무표 등록에 실패했습니다.')
+      setSaving(false)
     }
   }
 
