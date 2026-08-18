@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Moon,
   Sun,
@@ -67,6 +68,7 @@ const DEFAULT_THEME = {
 };
 
 export default function TimelinePage({ targetDate = "" }) {
+  const navigate = useNavigate();
   // --- 상태 관리 (State) ---
   const [loading, setLoading] = useState(true);
   const [timelineData, setTimelineData] = useState(null);
@@ -139,6 +141,7 @@ export default function TimelinePage({ targetDate = "" }) {
           "피드백이 성공적으로 제출되었습니다! AI가 다음 일정을 더 똑똑하게 준비할게요.",
         );
         handleCloseFeedback(); // 성공 시 모달 닫기
+        navigate("/home"); // 홈 대시보드로 이동하는 코드
       } else {
         alert(res.message || "피드백 제출에 실패했습니다.");
       }

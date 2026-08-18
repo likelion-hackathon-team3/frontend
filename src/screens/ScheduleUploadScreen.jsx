@@ -8,10 +8,25 @@ export default function ScheduleUploadScreen() {
   const navigate = useNavigate()
   const [recognizing, setRecognizing] = useState(false)
 
-  function handleUpload() {
+function handleUpload() {
     setRecognizing(true)
+    
     recognizeSchedule().then((result) => {
-      navigate('/schedule/confirm', { state: { marks: result.marks, uncertain: result.uncertain, source: 'ocr' } })
+      // success가 true일 때만 다음 화면으로 이동!
+      if (result.success === true) {
+        // (참고: API 명세서의 recognizedSchedules가 내려올 경우를 대비해 OR(||) 처리도 살짝 추가했습니다)
+        navigate('/schedule/confirm', { 
+          state: { 
+            marks: result.marks || result.recognizedSchedules || {}, 
+            uncertain: result.uncertain || result.failedDates || [], 
+            source: 'ocr' 
+          } 
+        })
+      } else {
+        // 실패 시 알림창 띄우기
+        alert(result.message || '이미지를 인식할 수 없습니다. 직접 입력해주세요.')
+        setRecognizing(false)
+      }
     })
   }
 

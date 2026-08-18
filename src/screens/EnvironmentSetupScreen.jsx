@@ -26,10 +26,28 @@ export default function EnvironmentSetupScreen() {
   const [commuteMinutes, setCommuteMinutes] = useState(40)
   const [saving, setSaving] = useState(false)
 
-  async function handleSubmit() {
+async function handleSubmit() {
     setSaving(true)
-    await saveEnvironment({ day, evening, night, commuteMinutes })
-    navigate('/schedule')
+    
+    // 1. API 명세서 규격(dayShift, eveningShift, nightShift)에 맞게 데이터를 포장합니다.
+    const payload = {
+      dayShift: day,
+      eveningShift: evening,
+      nightShift: night,
+      commuteMinutes: commuteMinutes
+    }
+
+    // 2. API를 호출하고 그 결과(쪽지)를 res 변수에 받습니다.
+    const res = await saveEnvironment(payload)
+    
+    // 3. 팀 규칙 적용: res.success가 true일 때만 넘어갑니다!
+    if (res.success === true) {
+      navigate('/home')
+    } else {
+      // 실패했을 경우 알림창을 띄우고, 다시 버튼을 누를 수 있게 로딩(saving)을 끕니다.
+      alert(res.message || '근무 시간 설정에 실패했습니다.')
+      setSaving(false)
+    }
   }
 
   return (
