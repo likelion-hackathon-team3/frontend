@@ -7,58 +7,72 @@ const BASE_URL = 'http://localhost:8080';
 // [진짜 서버 연동] 1. 근무표 조회 (GET)
 // ---------------------------------------------------------
 export async function fetchSchedule(year = 2026, month = 8) {
-  try {
-    const formattedMonth = `${year}-${String(month).padStart(2, '0')}`;
-    const response = await fetch(`${BASE_URL}/api/schedules?month=${formattedMonth}`);
-    const data = await response.json();
+ //추후 promise 삭제
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        year,
+        month,
+        marks: { "16": "D", "17": "E", "18": "N" } // 달력에 띄워볼 임시 데이터
+      })
+    }, 400)
+  })
+  // try {
+  //   const formattedMonth = `${year}-${String(month).padStart(2, '0')}`;
+  //   const response = await fetch(`${BASE_URL}/api/schedules?month=${formattedMonth}`);
+  //   const data = await response.json();
 
-    // 데이터가 없으면 빈 캘린더 반환
-    if (!data.schedules) return { year, month, marks: {} }; 
+  //   // 데이터가 없으면 빈 캘린더 반환
+  //   if (!data.schedules) return { year, month, marks: {} }; 
 
-    // 백엔드 배열 형식 -> 프론트엔드 캘린더 형식으로 자동 번역
-    const shiftReverseMap = { 'DAY': 'D', 'EVENING': 'E', 'NIGHT': 'N', 'OFF': 'OFF' };
-    const marks = {};
+  //   // 백엔드 배열 형식 -> 프론트엔드 캘린더 형식으로 자동 번역
+  //   const shiftReverseMap = { 'DAY': 'D', 'EVENING': 'E', 'NIGHT': 'N', 'OFF': 'OFF' };
+  //   const marks = {};
 
-    data.schedules.forEach(item => {
-      const dayStr = item.date.split('-')[2]; // 날짜에서 일(Day)만 쏙 빼냄
-      const dayNum = parseInt(dayStr, 10).toString();
-      marks[dayNum] = shiftReverseMap[item.shift] || item.shift;
-    });
+  //   data.schedules.forEach(item => {
+  //     const dayStr = item.date.split('-')[2]; // 날짜에서 일(Day)만 쏙 빼냄
+  //     const dayNum = parseInt(dayStr, 10).toString();
+  //     marks[dayNum] = shiftReverseMap[item.shift] || item.shift;
+  //   });
 
-    return { year, month, marks };
-  } catch (error) {
-    console.error("조회 에러:", error);
-    return { year, month, marks: {} }; // 에러 시 빈 캘린더 띄우기
-  }
+  //   return { year, month, marks };
+  // } catch (error) {
+  //   console.error("조회 에러:", error);
+  //   return { year, month, marks: {} }; // 에러 시 빈 캘린더 띄우기
+  // }
 }
 
 // ---------------------------------------------------------
 // [진짜 서버 연동] 2. 근무표 저장 (POST)
 // ---------------------------------------------------------
 export async function saveSchedule(payload) {
-  try {
-    // 프론트엔드 캘린더 형식 -> 백엔드가 좋아하는 배열 형식으로 자동 번역!
-    const formattedSchedules = Object.entries(payload.marks).map(([day, shiftShort]) => {
-      const shiftMap = { 'D': 'DAY', 'E': 'EVENING', 'N': 'NIGHT', 'OFF': 'OFF' };
-      const formattedDate = `${payload.year}-${String(payload.month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+  //추후 promise 삭제
+  return new Promise((resolve) => {
+    setTimeout(() => resolve({ success: true }), 400)
+  })
+  // try {
+  //   // 프론트엔드 캘린더 형식 -> 백엔드가 좋아하는 배열 형식으로 자동 번역!
+  //   const formattedSchedules = Object.entries(payload.marks).map(([day, shiftShort]) => {
+  //     const shiftMap = { 'D': 'DAY', 'E': 'EVENING', 'N': 'NIGHT', 'OFF': 'OFF' };
+  //     const formattedDate = `${payload.year}-${String(payload.month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
       
-      return {
-        date: formattedDate,
-        shift: shiftMap[shiftShort] || shiftShort
-      };
-    });
+  //     return {
+  //       date: formattedDate,
+  //       shift: shiftMap[shiftShort] || shiftShort
+  //     };
+  //   });
 
-    // 번역된 데이터를 진짜 서버로 발사!
-    const response = await fetch(`${BASE_URL}/api/schedules`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ schedules: formattedSchedules })
-    });
+  //   // 번역된 데이터를 진짜 서버로 발사!
+  //   const response = await fetch(`${BASE_URL}/api/schedules`, {
+  //     method: 'POST',
+  //     headers: { 'Content-Type': 'application/json' },
+  //     body: JSON.stringify({ schedules: formattedSchedules })
+  //   });
 
-    return await response.json(); // { success: true/false } 형태의 쪽지를 받아서 돌려줌
-  } catch (error) {
-    return { success: false, message: "저장 중 서버와 연결이 끊겼습니다." };
-  }
+  //   return await response.json(); // { success: true/false } 형태의 쪽지를 받아서 돌려줌
+  // } catch (error) {
+  //   return { success: false, message: "저장 중 서버와 연결이 끊겼습니다." };
+  // }
 }
 
 // ---------------------------------------------------------

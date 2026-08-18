@@ -42,7 +42,7 @@ async function handleSubmit() {
     
     // 3. 팀 규칙 적용: res.success가 true일 때만 넘어갑니다!
     if (res.success === true) {
-      navigate('/schedule')
+      navigate('/home')
     } else {
       // 실패했을 경우 알림창을 띄우고, 다시 버튼을 누를 수 있게 로딩(saving)을 끕니다.
       alert(res.message || '근무 시간 설정에 실패했습니다.')

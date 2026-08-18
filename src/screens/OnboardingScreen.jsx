@@ -1,5 +1,7 @@
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ScanLine, Sparkles, BellRing } from 'lucide-react'
+import { fetchEnvironment } from '../api/environment.js'
 
 const FEATURES = [
   { icon: ScanLine, title: '근무표 자동 인식', desc: '근무표 사진만 올리면 AI가 D/E/N/OFF를 자동으로 읽어드려요.' },
@@ -9,6 +11,15 @@ const FEATURES = [
 
 export default function OnboardingScreen() {
   const navigate = useNavigate()
+
+  // 앱이 켜지자마자 설정 여부를 확인하고, 이미 했으면 홈으로 바로 보냅니다!
+  useEffect(() => {
+    fetchEnvironment().then(env => {
+      if (env.configured) {
+        navigate('/home')
+      }
+    })
+  }, [navigate])
 
   return (
     <div className="min-h-screen bg-bg flex items-center justify-center px-6">
