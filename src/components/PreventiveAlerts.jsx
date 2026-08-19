@@ -15,13 +15,13 @@ const RISK_STYLE = {
 // 실제 API는 HTTP 에러가 아니라 200 + { success:false, message } 형태로 예외를 내려주므로
 // try/catch가 아니라 success 플래그로 상태를 분기한다.
 // 데이터가 없거나(조건 미충족) 로딩/에러 상태에서는 카드를 아예 노출하지 않는다 (조건부 노출 원칙).
-export default function PreventiveAlerts({ scenario = 'success', startDate, endDate }) {
+export default function PreventiveAlerts({ startDate, endDate }) {
   const [alerts, setAlerts] = useState([])
 
   useEffect(() => {
     let cancelled = false
 
-    fetchDashboardAlerts(scenario, { startDate, endDate }).then((res) => {
+    fetchDashboardAlerts({ startDate, endDate }).then((res) => {
       if (cancelled) return
       if (res.success) {
         setAlerts(res.alerts || [])
@@ -34,7 +34,7 @@ export default function PreventiveAlerts({ scenario = 'success', startDate, endD
     return () => {
       cancelled = true
     }
-  }, [scenario, startDate, endDate])
+  }, [startDate, endDate])
 
   if (alerts.length === 0) return null
 

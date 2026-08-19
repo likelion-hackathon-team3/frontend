@@ -6,6 +6,17 @@ import PreventiveAlerts from '../components/PreventiveAlerts.jsx'
 import { fetchTodayAndNextShift, fetchAnalysis, formatShiftMinutes } from '../api/status.js'
 import { MARK_STYLE } from '../components/MonthCalendar.jsx'
 
+// 사전예방 알림 조회 기간: 오늘부터 앞으로 14일.
+function toISODate(date) {
+  return date.toISOString().slice(0, 10)
+}
+function getAlertDateRange() {
+  const today = new Date()
+  const twoWeeksLater = new Date(today)
+  twoWeeksLater.setDate(today.getDate() + 14)
+  return { startDate: toISODate(today), endDate: toISODate(twoWeeksLater) }
+}
+
 function ShiftCard({ label, tag, shift }) {
   const style = MARK_STYLE[shift.type]
   return (
@@ -30,8 +41,7 @@ export default function HomeScreen() {
     let cancelled = false
     Promise.all([fetchTodayAndNextShift(), fetchAnalysis()]).then(([data, analysis]) => {
       if (cancelled) return
-      const nextShiftIn =
-        analysis.success !== false ? formatShiftMinutes(analysis.currentCondition.nextShiftMinutes) : null
+      const nextShiftIn = analysis.success !== false ? formatShiftMinutes(analysis.nextShiftMinutes) : null
       setState({ status: 'success', data: { ...data, nextShiftIn } })
     })
     return () => {
@@ -77,7 +87,7 @@ export default function HomeScreen() {
             </div>
 
             <div className="mb-5">
-              <PreventiveAlerts />
+              <PreventiveAlerts {...getAlertDateRange()} />
             </div>
 
             <div className="bg-card rounded-2xl border border-lavender/10 p-6">
