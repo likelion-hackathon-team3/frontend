@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { AlertTriangle, Check } from 'lucide-react'
 import Sidebar from '../components/Sidebar.jsx'
 import MonthCalendar, { MARK_STYLE } from '../components/MonthCalendar.jsx'
-import { saveSchedule } from '../api/schedule.js'
+import { saveSchedule, fetchSchedule, deleteScheduleDate } from '../api/schedule.js'
 import { fetchEnvironment } from '../api/environment.js'
 
 const PATTERNS = ['D', 'E', 'N', 'OFF']
@@ -20,16 +20,42 @@ export default function ScheduleConfirmScreen() {
   const [activePattern, setActivePattern] = useState('D')
   const [saving, setSaving] = useState(false)
 
+  // 2. 사용자가 달력에서 지워버린(삭제할) 날짜들을 모아둘 바구니를 만듭니다.
+  const [deletedDates, setDeletedDates] = useState(new Set())
+
+  useEffect(() => {
+    fetchSchedule(YEAR, MONTH).then((res) => {
+      if (res.marks) {
+        setMarks((prevMarks) => ({
+          ...res.marks,
+          ...prevMarks
+        }))
+      }
+    })
+  }, [])
+
   function handleDayClick(day) {
+    // 백엔드 명세서 규격에 맞게 "2026-08-05" 형태로 날짜를 만듭니다.
+    const dateStr = `${YEAR}-${String(MONTH).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+
     setMarks((prev) => {
       const next = { ...prev }
       if (next[day] === activePattern) {
+        //  3-1. 이미 칠해진 날짜를 한 번 더 눌러서 지울 때 -> 삭제 바구니에 담기
         delete next[day]
+        setDeletedDates((prevSet) => new Set(prevSet).add(dateStr))
       } else {
+        //  3-2. 새롭게 날짜를 칠할 때 -> 삭제 바구니에 혹시 있었다면 빼주기
         next[day] = activePattern
+        setDeletedDates((prevSet) => {
+          const newSet = new Set(prevSet)
+          newSet.delete(dateStr)
+          return newSet
+        })
       }
       return next
     })
+    
     setUncertain((prev) => {
       const next = new Set(prev)
       next.delete(String(day))
@@ -37,23 +63,38 @@ export default function ScheduleConfirmScreen() {
     })
   }
 
-async function handleRegister() {
+  async function handleRegister() {
     setSaving(true)
     
-    // 1. API 통신 결과를 res 변수에 담습니다.
-    const res = await saveSchedule({ year: YEAR, month: MONTH, marks })
-    
-    // 2. success가 true일 때만 다음 화면으로 넘어갑니다.
-    if (res.success === true) {
-      const env = await fetchEnvironment()
-      if (env.configured) { 
-        navigate('/schedule') 
+    try {
+      // 1. 장바구니에 담아둔 삭제할 날짜들을 백엔드에서 싹 지웁니다.
+      const deletePromises = Array.from(deletedDates).map(date => deleteScheduleDate(date))
+      await Promise.all(deletePromises)
+
+      // 2. 남은 근무표 데이터를 백엔드에 저장합니다.
+      const res = await saveSchedule({ year: YEAR, month: MONTH, marks })
+      
+      if (res.success === true) {
+        // 💡 백엔드 서버 대신, 현재 브라우저 탭의 임시 기억 장치를 확인합니다!
+        const hasSeenSetup = sessionStorage.getItem('hasSeenEnvSetup')
+
+        if (!hasSeenSetup) {
+          // 브라우저가 처음 열려서 아직 설정 화면을 안 봤다면?
+          // 1) "이제 봤음!" 이라고 도장을 쾅 찍어줍니다.
+          sessionStorage.setItem('hasSeenEnvSetup', 'true')
+          // 2) 설정 화면으로 보냅니다.
+          navigate('/schedule/hours') 
+        } else {
+          // 이미 도장이 찍혀 있다면 무조건 달력 화면으로 보냅니다.
+          navigate('/schedule') 
+        }
       } else {
-        navigate('/schedule/hours')
+        alert(res.message || '근무표 등록에 실패했습니다.')
       }
-    } else {
-      // 3. 실패 시 에러 메시지를 띄우고 로딩을 풀어줍니다.
-      alert(res.message || '근무표 등록에 실패했습니다.')
+    } catch (error) {
+      console.error(error)
+      alert("서버 통신 중 오류가 발생했습니다.")
+    } finally {
       setSaving(false)
     }
   }
@@ -68,7 +109,7 @@ async function handleRegister() {
         <p className="text-sm text-muted mb-6">
           {initial.source === 'ocr'
             ? '잘못 인식되었거나 빠진 날짜는 아래에서 직접 눌러 수정할 수 있어요.'
-            : '왼쪽에서 유형을 고른 뒤 달력의 날짜를 눌러 지정해주세요.'}
+            : '왼쪽에서 유형을 고른 뒤 달력의 날짜를 눌러 지정해주세요. 날짜를 한번 더 누르면 유형을 삭제할 수 있어요.'}
         </p>
 
         {uncertain.size > 0 && (
