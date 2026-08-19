@@ -130,7 +130,7 @@ if (res.success) {
 | 사전예방 알림 | `GET /api/dashboard` | `src/api/dashboard.js` |
 | 사용자 피드백 | `POST /api/feedback` | `src/api/feedback.js` |
 | 웰니스 타임라인 | `GET, POST /api/timeline` | `src/data/timeline-mock.json` (아직 목업만, fetch 미연동) |
-| 개인화 보정 | `GET /api/personalization` | 미구현 (MVP 범위 밖) |
+| 개인화 보정 | `GET /api/personalization` | 미구현 (추가해야함) |
 
 전체 15개 엔드포인트 명세는 Notion "API 명세서" 페이지 참고.
 
