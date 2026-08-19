@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react' // 👈 useRef 추가
 import { useNavigate } from 'react-router-dom'
 import { Camera, Loader2, PenLine } from 'lucide-react'
 import Sidebar from '../components/Sidebar.jsx'
@@ -7,14 +7,25 @@ import { recognizeSchedule } from '../api/schedule.js'
 export default function ScheduleUploadScreen() {
   const navigate = useNavigate()
   const [recognizing, setRecognizing] = useState(false)
+  
+  // 💡 1. 숨겨진 파일 입력창을 조종할 리모컨(ref) 생성
+  const fileInputRef = useRef(null)
 
-function handleUpload() {
+  // 💡 2. 업로드 박스를 누르면 숨겨진 파일창을 대신 클릭하게 만드는 함수
+  const handleBoxClick = () => {
+    fileInputRef.current.click()
+  }
+
+  // 💡 3. 사용자가 실제 사진 파일을 선택했을 때 실행되는 함수
+  const handleFileChange = (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+
     setRecognizing(true)
-    
-    recognizeSchedule().then((result) => {
-      // success가 true일 때만 다음 화면으로 이동!
+
+    // 나중에 진짜 백엔드 OCR(사진 전송) API를 연결할 때 이 파라미터(file)를 넘겨주면 됩니다!
+    recognizeSchedule(file).then((result) => {
       if (result.success === true) {
-        // (참고: API 명세서의 recognizedSchedules가 내려올 경우를 대비해 OR(||) 처리도 살짝 추가했습니다)
         navigate('/schedule/confirm', { 
           state: { 
             marks: result.marks || result.recognizedSchedules || {}, 
@@ -23,7 +34,6 @@ function handleUpload() {
           } 
         })
       } else {
-        // 실패 시 알림창 띄우기
         alert(result.message || '이미지를 인식할 수 없습니다. 직접 입력해주세요.')
         setRecognizing(false)
       }
@@ -41,12 +51,22 @@ function handleUpload() {
         <h1 className="text-lg font-bold text-ink mb-1">근무표를 업로드해주세요.</h1>
         <p className="text-sm text-muted mb-6">근무표 사진을 올리면 AI가 D/E/N/OFF 일정을 자동으로 인식해요.</p>
 
+        {/* 💡 4. 업로드 박스를 누르면 handleBoxClick이 실행되도록 연결 */}
         <button
           type="button"
-          onClick={handleUpload}
+          onClick={handleBoxClick}
           disabled={recognizing}
-          className="w-full bg-card border-2 border-dashed border-lavender/30 rounded-2xl py-10 flex flex-col items-center gap-3 hover:border-lavender-deep/50 transition-colors disabled:opacity-60"
+          className="w-full bg-card border-2 border-dashed border-lavender/30 rounded-2xl py-10 flex flex-col items-center gap-3 hover:border-lavender-deep/50 transition-colors disabled:opacity-60 cursor-pointer"
         >
+          {/* 💡 화면에는 보이지 않지만 실제로 파일 선택 팝업을 띄워주는 핵심 요소 */}
+          <input
+            type="file"
+            accept="image/*"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            className="hidden"
+          />
+
           {recognizing ? (
             <>
               <Loader2 size={26} className="text-lavender-deep animate-spin" />
