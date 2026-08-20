@@ -16,9 +16,10 @@ import {
   Star,
 } from "lucide-react";
 
-// 💡 1. 통신에 필요한 API 함수 2개 모두 임포트!
+// 💡 1. 통신에 필요한 API 함수 3개 모두 임포트!
 import { fetchTimeline } from "../api/timeline.js";
 import { submitFeedback } from "../api/timelineFeedback.js";
+import { fetchPersonalization } from "../api/personalization";
 
 // 상단 범례 데이터
 const LEGEND_ITEMS = [
@@ -72,6 +73,7 @@ export default function TimelinePage({ targetDate = "" }) {
   // --- 상태 관리 (State) ---
   const [loading, setLoading] = useState(true);
   const [timelineData, setTimelineData] = useState(null);
+  const [personalNotice, setPersonalNotice] = useState("");
 
   // 피드백 모달 관련 상태
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
@@ -101,6 +103,12 @@ export default function TimelinePage({ targetDate = "" }) {
         alert(res.message || "타임라인을 불러오지 못했습니다.");
       }
       setLoading(false);
+    });
+    fetchPersonalization("EVENING").then((data) => {
+      if (!isMounted) return;
+      if (data && data.recommendedRoutineNotice) {
+        setPersonalNotice(data.recommendedRoutineNotice);
+      }
     });
 
     return () => {
@@ -251,6 +259,16 @@ export default function TimelinePage({ targetDate = "" }) {
           <div className="bg-[#F5F3FA] rounded-3xl border border-lavender/20 p-6">
             <h3 className="font-bold text-lavender-deep mb-6">추천 포인트</h3>
             <ul className="flex flex-col gap-5 text-sm text-ink/90 font-medium">
+              {personalNotice && (
+                <li className="flex gap-2.5 bg-lavender/10 p-3 rounded-xl border border-lavender-deep/30 mb-2">
+                  <span className="text-lavender-deep font-bold mt-0.5">
+                    🌟
+                  </span>
+                  <span className="leading-relaxed font-bold text-lavender-deep">
+                    [맞춤 피드백] {personalNotice}
+                  </span>
+                </li>
+              )}
               {timelineData.recommendations?.map((recText, idx) => (
                 <li key={idx} className="flex gap-2.5">
                   <span className="text-lavender-deep font-bold mt-0.5">•</span>
