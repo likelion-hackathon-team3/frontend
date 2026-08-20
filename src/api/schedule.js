@@ -71,7 +71,7 @@ export async function recognizeSchedule(imageFile) {
     formData.append('file', imageFile);
 
     // 2. 백엔드 OCR API로 사진을 발사합니다!
-    const response = await fetch(`${BASE_URL}/api/ocr/schedule`, {
+    const response = await fetch(`${BASE_URL}/api/schedules/recognize`, {
       method: 'POST',
       body: formData, // 사진(파일)은 JSON이 아니라 formData로 보냅니다.
     });
@@ -97,8 +97,8 @@ export async function recognizeSchedule(imageFile) {
 
       return {
         success: true,
-        marks: marks,       // 👈 번역 완료된 캘린더 데이터
-        uncertain: failed   // 👈 인식이 안 된 날짜들
+        marks: marks,       // 번역 완료된 캘린더 데이터
+        uncertain: failed   // 인식이 안 된 날짜들
       };
     } else {
       return { success: false, message: res.message };
